@@ -26,8 +26,14 @@ async function bootstrap() {
   );
 
   // CORS configuration
+  const corsOrigin = configService.get<string>('CORS_ORIGIN') || 'http://localhost:3000';
+  const allowedOrigins = corsOrigin
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter((origin) => origin.length > 0);
+  
   app.enableCors({
-    origin: configService.get<string>('CORS_ORIGIN') || 'http://localhost:3000',
+    origin: allowedOrigins.length === 1 ? allowedOrigins[0] : allowedOrigins,
     credentials: true,
   });
 
