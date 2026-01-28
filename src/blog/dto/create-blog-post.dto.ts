@@ -76,5 +76,9 @@ export class CreateBlogPostDto {
   @IsString()
   @IsOptional()
   authorId?: string;
+
+  @IsString()
+  @IsOptional()
+  youtubeLink?: string;
 }
 

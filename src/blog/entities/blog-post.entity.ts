@@ -55,5 +55,8 @@ export class BlogPost extends BaseEntity {
 
   @Column({ nullable: true })
   authorId: string;
+
+  @Column({ nullable: true })
+  youtubeLink: string;
 }
 

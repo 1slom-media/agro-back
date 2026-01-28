@@ -106,8 +106,21 @@ export class ProductsService {
       }
     }
 
-    Object.assign(product, updateProductDto);
-    return this.productRepository.save(product);
+    // Use repository.update() to directly update the database
+    // This ensures categoryId and all other fields are properly persisted
+    await this.productRepository.update(id, updateProductDto);
+    
+    // Reload the product with relations to return fresh data
+    const updatedProduct = await this.productRepository.findOne({
+      where: { id },
+      relations: ['category'],
+    });
+    
+    if (!updatedProduct) {
+      throw new NotFoundException(`Product with ID ${id} not found after update`);
+    }
+    
+    return updatedProduct;
   }
 
   async remove(id: string): Promise<void> {
