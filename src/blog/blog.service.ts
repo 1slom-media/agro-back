@@ -27,11 +27,20 @@ export class BlogService {
   }
 
   async findAll(paginationDto?: PaginationDto): Promise<PaginatedResult<BlogPost>> {
-    const { page = 1, limit = 10 } = paginationDto || {};
+    const { page = 1, limit = 10, isPublished } = paginationDto || {};
     const skip = (page - 1) * limit;
 
+    // Build where condition based on isPublished query parameter
+    const where: any = {};
+    if (isPublished === 'true') {
+      where.isPublished = true;
+    } else if (isPublished === 'false') {
+      where.isPublished = false;
+    }
+    // If isPublished is 'all' or undefined, don't filter by isPublished
+
     const [data, total] = await this.blogPostRepository.findAndCount({
-      where: { isPublished: true },
+      where: Object.keys(where).length > 0 ? where : undefined,
       skip,
       take: limit,
       order: { publishedAt: 'DESC', createdAt: 'DESC' },

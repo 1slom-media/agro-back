@@ -1,4 +1,4 @@
-import { IsOptional, IsInt, Min, Max } from 'class-validator';
+import { IsOptional, IsInt, Min, Max, IsString, IsIn } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class PaginationDto {
@@ -14,6 +14,11 @@ export class PaginationDto {
   @Min(1)
   @Max(100)
   limit?: number = 10;
+
+  @IsOptional()
+  @IsString()
+  @IsIn(['all', 'true', 'false'])
+  isPublished?: string;
 }
 
 export interface PaginatedResult<T> {
