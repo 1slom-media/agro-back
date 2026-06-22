@@ -6,20 +6,19 @@ import {
   Patch,
   Param,
   Delete,
-  UseGuards,
   Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { ApiJwtAuth } from '../auth/decorators/api-jwt-auth.decorator';
 import { UserRole } from './entities/user.entity';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @UseGuards(JwtAuthGuard)
+  @ApiJwtAuth()
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
     const user = await this.usersService.create(
@@ -44,7 +43,7 @@ export class UsersController {
     };
   }
 
-  @UseGuards(JwtAuthGuard)
+  @ApiJwtAuth()
   @Get()
   async findAll(@Query('page') page?: number, @Query('limit') limit?: number) {
     const users = await this.usersService.findAll();
@@ -62,7 +61,7 @@ export class UsersController {
     };
   }
 
-  @UseGuards(JwtAuthGuard)
+  @ApiJwtAuth()
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const user = await this.usersService.findById(id);
@@ -79,7 +78,7 @@ export class UsersController {
     };
   }
 
-  @UseGuards(JwtAuthGuard)
+  @ApiJwtAuth()
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     const user = await this.usersService.update(id, updateUserDto);
@@ -93,7 +92,7 @@ export class UsersController {
     };
   }
 
-  @UseGuards(JwtAuthGuard)
+  @ApiJwtAuth()
   @Delete(':id')
   async remove(@Param('id') id: string) {
     return this.usersService.remove(id);

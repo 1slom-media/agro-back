@@ -1,6 +1,6 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { Public } from '../auth/decorators/public.decorator';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { ApiJwtAuth } from '../auth/decorators/api-jwt-auth.decorator';
 import { DictionaryService } from './dictionary.service';
 import { DictionaryType } from './entities/dictionary-item.entity';
 import { CreateDictionaryItemDto } from './dto/create-dictionary-item.dto';
@@ -49,25 +49,25 @@ export class DictionaryController {
   }
 
   // CRUD (admin)
-  @UseGuards(JwtAuthGuard)
+  @ApiJwtAuth()
   @Get()
   findAll() {
     return this.dictionaryService.findAll();
   }
 
-  @UseGuards(JwtAuthGuard)
+  @ApiJwtAuth()
   @Post()
   create(@Body() dto: CreateDictionaryItemDto) {
     return this.dictionaryService.create(dto);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @ApiJwtAuth()
   @Patch(':id')
   update(@Param('id') id: string, @Body() dto: UpdateDictionaryItemDto) {
     return this.dictionaryService.update(id, dto);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @ApiJwtAuth()
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.dictionaryService.remove(id);

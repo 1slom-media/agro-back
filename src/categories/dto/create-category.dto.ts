@@ -1,55 +1,38 @@
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsString, IsNotEmpty, IsOptional, IsBoolean, IsNumber, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
-
-class MultilingualString {
-  @IsString()
-  @IsNotEmpty()
-  uz: string;
-
-  @IsString()
-  @IsNotEmpty()
-  ru: string;
-
-  @IsString()
-  @IsNotEmpty()
-  en: string;
-}
-
-class ImageData {
-  @IsString()
-  @IsOptional()
-  base64?: string;
-
-  @IsString()
-  @IsOptional()
-  url?: string;
-}
+import { ImageDataDto, MultilingualStringDto } from '../../common/dto/swagger.dto';
 
 export class CreateCategoryDto {
+  @ApiProperty({ type: MultilingualStringDto })
   @ValidateNested()
-  @Type(() => MultilingualString)
-  name: MultilingualString;
+  @Type(() => MultilingualStringDto)
+  name: MultilingualStringDto;
 
+  @ApiPropertyOptional({ type: MultilingualStringDto })
   @ValidateNested()
-  @Type(() => MultilingualString)
+  @Type(() => MultilingualStringDto)
   @IsOptional()
-  description?: MultilingualString;
+  description?: MultilingualStringDto;
 
+  @ApiProperty({ example: 'agrovolokno' })
   @IsString()
   @IsNotEmpty()
   slug: string;
 
+  @ApiPropertyOptional({ type: ImageDataDto })
   @ValidateNested()
-  @Type(() => ImageData)
+  @Type(() => ImageDataDto)
   @IsOptional()
-  image?: ImageData;
+  image?: ImageDataDto;
 
+  @ApiPropertyOptional({ example: true })
   @IsBoolean()
   @IsOptional()
   isActive?: boolean;
 
+  @ApiPropertyOptional({ example: 0 })
   @IsNumber()
   @IsOptional()
   order?: number;
 }
-
